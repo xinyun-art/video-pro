@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./iconfont/iconfont.css" />
+    <style>
+      body {
+        margin: 0;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .video-container {
+        width: 600px;
+        height: 400px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .video {
+        width: 100%;
+        /* height: 340px; */
+        height: 100%;
+        object-fit: fill;
+      }
+      .video-tools {
+        width: 100%;
+        height: 60px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        background-color: black;
+      }
+      .video-progress_out-bar {
+        width: 100%;
+        height: 5px;
+        background-color: rgba(105, 105, 105, 0.8);
+        margin-top: 4px;
+        border-radius: 1px;
+        cursor: pointer;
+        position: relative;
+      }
+      .video-progress_preload-bar {
+        display: block;
+        /* width: 80%; */
+        height: 100%;
+        background-color: #808080;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 997;
+      }
+      .video-progress_inner-bar {
+        display: block;
+        /* width: 80%; */
+        height: 100%;
+        background-color: #00bfff;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 998;
+      }
+      .video-progress_pointer {
+        display: block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        position: absolute;
+        left: 0;
+        top: -3px;
+        z-index: 999;
+      }
+      .video-mask {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: lightsalmon;
+        opacity: 0.3;
+        z-index: 9999;
+      }
+      .video-control-tools {
+        margin-top: 12px;
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        color: #ffffff;
+        padding: 0 15px;
+      }
+      .video-control-tools div {
+        cursor: pointer;
+      }
+      /* .video-control_left-tools {
+      } */
+      .icon {
+        font-size: 18px;
+        vertical-align: middle;
+      }
+      .video-control_current-time,
+      .video-control_duration {
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      .video-control_current-time {
+        margin-left: 5px;
+      }
+      .video-control_time-divide {
+        font-size: 12px;
+      }
+      .video-control_right-tools {
+        display: flex;
+      }
+      /* .video-control_right-tools div:not(:last-child) {
+        margin-right: 20px;
+      } */
+      .video-control_right-tools > div {
+        min-width: 45px;
+        text-align: center;
+      }
+      .video-control_speed-wrap,
+      .video-control_vioce-wrap,
+      .video-control_setting-wrap {
+        position: relative;
+      }
+      .video-control_speed {
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      ul.video-control_speed-box {
+        position: absolute;
+        left: -15px;
+        bottom: 50px;
+        width: 70px;
+        background-color: rgba(0, 0, 0, 0.7);
+        font-size: 14px;
+        border-radius: 3px;
+        overflow: hidden;
+        display: none;
+      }
+      ul.video-control_speed-box > li {
+        height: 30px;
+        line-height: 30px;
+      }
+      ul.video-control_speed-box > li:hover {
+        background-color: rgba(192, 192, 192, 0.3);
+      }
+      .video-control_voice-box {
+        position: absolute;
+        left: 5px;
+        bottom: 50px;
+        width: 30px;
+        height: 100px;
+        background-color: rgba(0, 0, 0, 0.7);
+        font-size: 14px;
+        border-radius: 3px;
+        overflow: hidden;
+        /* display: none; */
+      }
+      .video-progress_voice-outbar {
+        width: 2px;
+        height: 60px;
+        background-color: rgba(255, 255, 255, 0.8);
+        margin: 5px auto 0;
+        border-radius: 1.5px;
+        position: relative;
+      }
+      .video-progress_voice-innerbar {
+        display: block;
+        width: 100%;
+        background-color: #00bfff;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+      .video-progress_voice-pointer {
+        display: block;
+        width: 10px;
+        height: 10px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        position: absolute;
+        left: -4px;
+        bottom: 0;
+      }
+      .video-voice_num {
+        display: block;
+        font-size: 12px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="video_container" class="video-container">
+      <video id="video" src="./tx_v.mp4" class="video"></video>
+      <!-- <video
+        id="video"
+        src="https://apd-cf1cc02deee0dcdc04852779610f679e.v.smtcdns.com/om.tc.qq.com/Ah32HZVcfgWlIQYRoqC3POqRpuL6s0wskTuz36YSUDBo/uwMROfz2r57CIaQXGdGnC2dePkZqjjlJK4UbWCf8jsE_RNpY/svp_50001/szg_1156_50001_0b6btmaceaaahqaohk4do5pvdg6deknqaisa.f622.mp4?sdtfrom=v1010&guid=ce0a08b0979b08191d54aa800b7c52d8&vkey=5F1669EF33367C3F1921D618E2AA46172167CD7992E405BD5CBF2424875EB75732DF7B3743BD5BE6FABB2E56D85E504AF4C8F4025DE902347591275809D75DCC2075BDD1EC67F5D7C0526F105AE592AEED5947A579E0A961701EFA8385F9CA59CE47D63C9163DB34C1597C44DA6D1F6F0B896A5CD42F5457848AE98782047640"
+        class="video"
+      ></video> -->
+      <div class="video-tools">
+        <div id="video-out_bar" class="video-progress_out-bar">
+          <span id="video-inner_bar" class="video-progress_inner-bar"></span>
+          <span id="video-preload_bar" class="video-progress_preload-bar"></span>
+          <span id="video-pointer" class="video-progress_pointer"></span>
+        </div>
+        <div class="video-control-tools">
+          <div class="video-control_left-tools">
+            <span id="play" class="icon iconfont icon-icon_play"></span>
+            <span id="pause" class="icon iconfont icon-bofang1" style="display: none"></span>
+
+            <span id="time" class="video-control_current-time">00:00:00</span>
+            <span class="video-control_time-divide">/</span>
+            <span id="duration" class="video-control_duration"></span>
+          </div>
+          <div class="video-control_right-tools">
+            <div class="video-control_speed-wrap">
+              <span id="speed-txt" class="video-control_speed">倍速</span>
+              <ul id="speed-box" class="video-control_speed-box">
+                <li>2.0x</li>
+                <li>1.5x</li>
+                <li>1.25x</li>
+                <li>1.0x</li>
+                <li>0.75x</li>
+                <li>0.5x</li>
+              </ul>
+            </div>
+            <div class="video-control_vioce-wrap">
+              <span class="icon iconfont icon-yinliang"></span>
+              <div class="video-control_voice-box">
+                <!-- 这里的初始值100最好写上，或者随便写个数字，它会占据一个高度，js中计算高度时会用到 -->
+                <span id="video-voice_num" class="video-voice_num">100</span>
+                <div id="voice-progress_bg" class="video-progress_voice-bg">
+                  <div id="video-voice_outbar" class="video-progress_voice-outbar">
+                    <span id="video-voice-innerbar" class="video-progress_voice-innerbar"></span>
+                    <span id="video-voice_pointer" class="video-progress_voice-pointer"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="video-control_setting-wrap">
+              <span class="icon iconfont icon-shezhi"></span>
+            </div>
+            <div id="fullscrreen" class="video-control_fullscreen-wrap">
+              <span class="icon iconfont icon-quanping"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="video-mask" class="video-mask" style="display: none"></div>
+      <div id="voice-mask" class="video-mask" style="display: none"></div>
+      <div id="loading-mask" class="video-mask">
+        <img src="./images/pacman.gif" alt="loading..." />
+      </div>
+    </div>
+    <script src="./video.js"></script>
+  </body>
+</html>
